@@ -1,0 +1,7 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  text-align: center;
+  background-color: hsla(0, 0%, 0%, 0.9);
+}
