@@ -6,7 +6,7 @@ import Button from './Button/Button.js';
 import Modal from './Modal/Modal.js';
 import Spinner from './Spinner/Spinner.js';
 
-import ApiPixabayServices from '../Services/apiServicePixabay.js';
+import crateArrayWithObjImg from '../Services/data.js';
 
 export default class App extends Component {
   state = {
@@ -19,39 +19,22 @@ export default class App extends Component {
   };
 
   fetchArticles = async () => {
-    try {
-      const { currentQuery, page } = this.state;
-      this.setState({ loader: true });
-      const hits = await ApiPixabayServices.fetchArticles(currentQuery, page);
-      const galleryImg = hits.map(hit => {
-        return {
-          id: hit.id,
-          webImgUrl: hit.webformatURL,
-          largeImageURL: hit.largeImageURL,
-          webformatWidth: hit.webformatWidth,
-          webformatHeight: hit.webformatHeight,
-          tags: hit.tags,
-        };
-      });
-      this.setState(prevState => ({
-        gallery: [...prevState.gallery, ...galleryImg],
-        page: prevState.page + 1,
-      }));
-    } catch (error) {
-      console.log('MY ERROR:', error);
-    } finally {
-      this.setState({
-        loader: false,
-        heightToScroll: document.body.scrollHeight - 56, //56- це висота кнопки Load з margin-top
-      });
-    }
+    this.setState({ loader: true });
+    const { currentQuery, page } = this.state;
+    const galleryImg = await crateArrayWithObjImg(currentQuery, page);
+    this.setState(prevState => ({
+      gallery: [...prevState.gallery, ...galleryImg],
+      page: prevState.page + 1,
+      loader: false,
+      heightToScroll: document.body.scrollHeight - 56,
+    }));
   };
 
   componentDidUpdate(prevProps, prevState) {
     const { currentQuery, loader, heightToScroll } = this.state;
     if (prevState.currentQuery !== currentQuery && currentQuery !== '')
       this.fetchArticles();
-    if (loader) {
+    if (!loader) {
       window.scrollTo({
         top: heightToScroll,
         behavior: 'smooth',

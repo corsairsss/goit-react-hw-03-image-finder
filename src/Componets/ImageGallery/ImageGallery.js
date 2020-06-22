@@ -7,7 +7,7 @@ import s from './ImageGallery.module.css';
 export default function ImageGallery({ gallery, onClick }) {
   return (
     <ul className={s.list} onClick={onClick}>
-      <ImageGalleryItem gallery={gallery} />
+       {gallery.map(elem=><ImageGalleryItem {...elem} />)}
     </ul>
   );
 }

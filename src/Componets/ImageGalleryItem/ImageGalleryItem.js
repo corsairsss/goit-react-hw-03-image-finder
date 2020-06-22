@@ -2,21 +2,20 @@ import React from 'react';
 
 import s from './ImageGalleryItem.module.css';
 
-export default function ImageGalleryItem({ gallery }) {
+export default function ImageGalleryItem({id,webImgUrl,webformatWidth,webformatHeight,largeImageURL,tags }) {
   return (
-    <>
-      {gallery.map(item => (
-        <li key={item.id}>
+    
+       <li key={id}>
           <img
-            src={item.webImgUrl}
-            width={item.webformatWidth}
-            height={item.webformatHeight}
-            data-large={item.largeImageURL}
+            src={webImgUrl}
+            width={webformatWidth}
+            height={webformatHeight}
+            data-large={largeImageURL}
             className={s.listItem__img}
-            alt={item.tags}
+            alt={tags}
           />
         </li>
-      ))}
-    </>
+      
+   
   );
 }
