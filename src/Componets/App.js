@@ -6,7 +6,7 @@ import Button from './Button/Button.js';
 import Modal from './Modal/Modal.js';
 import Spinner from './Spinner/Spinner.js';
 
-import crateArrayWithObjImg from '../Services/data.js';
+import FetchData from '../Services/dataNew.js';
 
 export default class App extends Component {
   state = {
@@ -16,24 +16,13 @@ export default class App extends Component {
     largeImgInModal: '',
     loader: false,
     heightToScroll: 0,
-  };
-
-  fetchArticles = async () => {
-    this.setState({ loader: true });
-    const { currentQuery, page } = this.state;
-    const galleryImg = await crateArrayWithObjImg(currentQuery, page);
-    this.setState(prevState => ({
-      gallery: [...prevState.gallery, ...galleryImg],
-      page: prevState.page + 1,
-      loader: false,
-      heightToScroll: document.body.scrollHeight - 56,
-    }));
+    demo: 0,
   };
 
   componentDidUpdate(prevProps, prevState) {
     const { currentQuery, loader, heightToScroll } = this.state;
     if (prevState.currentQuery !== currentQuery && currentQuery !== '')
-      this.fetchArticles();
+      FetchData(this);
     if (!loader) {
       window.scrollTo({
         top: heightToScroll,
@@ -55,7 +44,7 @@ export default class App extends Component {
 
   CloseModal = () => this.setState({ largeImgInModal: '' });
 
-  LoadMore = () => this.fetchArticles();
+  LoadMore = () => FetchData(this);
 
   render() {
     const { largeImgInModal, gallery, loader } = this.state;
